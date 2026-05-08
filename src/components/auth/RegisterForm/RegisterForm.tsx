@@ -128,11 +128,11 @@ function RegisterFormComponent({
 				<div>앱을 다운로드하세요.</div>
 				<div className="mt-[10px] mb-[10px] flex gap-[8px]">
 					<a
-						href="https://play.google.com/store/apps/details?id=com.instagram.android&referrer=ig_mid%3DBBF50F65-33CA-48E8-91EB-0393760F89DB%26utm_campaign%3DloginPage%26utm_content%3Dlo%26utm_source%3Dinstagramweb%26utm_medium%3Dbadge"
+						href="http://play.google.com/store/apps/details?id=com.instagram.android&referrer=ig_mid%3DBBF50F65-33CA-48E8-91EB-0393760F89DB%26utm_campaign%3DloginPage%26utm_content%3Dlo%26utm_source%3Dinstagramweb%26utm_medium%3Dbadge"
 						target="_blank"
 					>
 						<img
-							src="https://static.cdninstagram.com/rsrc.php/v3/ye/r/UtJtFmFLCiD.png"
+							src="http://static.cdninstagram.com/rsrc.php/v3/ye/r/UtJtFmFLCiD.png"
 							className="h-[40px]"
 						/>
 					</a>
@@ -141,7 +141,7 @@ function RegisterFormComponent({
 						target="_blank"
 					>
 						<img
-							src="https://static.cdninstagram.com/rsrc.php/v3/yw/r/LBxTdceDfgS.png"
+							src="http://static.cdninstagram.com/rsrc.php/v3/yw/r/LBxTdceDfgS.png"
 							className="h-[40px]"
 						/>
 					</a>

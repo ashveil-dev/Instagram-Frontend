@@ -53,7 +53,7 @@ function MainMenuContainer() {
 			} else if (["search", "notification"].includes(key)) {
 				toggleSlideMenu(key);
 			} else if ("threads" === key)
-				window.open("https://threads.net", "_blank");
+				window.open("http://threads.net", "_blank");
 			else if ("createPost" === key) {
 				showModal(key);
 			} else if ("menu" === key) dispatch(toggleDetailMenu());
