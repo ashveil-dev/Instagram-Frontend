@@ -26,21 +26,27 @@ function App() {
 		const refreshToken = localStorage.getItem("refreshToken");
 
 		dispatch(checkThunk({ accessToken, refreshToken }));
-	}, [location.pathname, dispatch]);
+	}, [dispatch]);
 
 	useEffect(() => {
+		if (loading) return;
+
 		if (isLogin && location.pathname === "/") {
-			return navigate("/home");
+			navigate("/home", { replace: true });
+			return;
 		}
 
 		if (!isLogin && location.pathname !== "/") {
-			return navigate("/");
+			navigate("/", { replace: true });
 		}
-	}, [location.pathname, navigate, isLogin]);
+	}, [location.pathname, navigate, isLogin, loading]);
+
+	if (loading) {
+		return <LoadingComponent />;
+	}
 
 	return (
 		<>
-			{loading && <LoadingComponent />}
 			<Routes>
 				<Route path="/" element={<AuthPage />} />
 				<Route element={<AppLayout />}>

@@ -2,6 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      (function () {
+        var path = location.pathname;
+        var match = path.match(/\/Instagram-Frontend(\/.*)?$/);
+        if (match && match[1] && match[1] !== "/" && !location.hash) {
+          location.replace(
+            location.origin +
+              "/Instagram-Frontend/#" +
+              match[1] +
+              location.search
+          );
+        }
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/instagram.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Instagram</title>

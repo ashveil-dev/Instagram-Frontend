@@ -84,10 +84,16 @@ GitHub Pages는 정적 사이트만 호스팅할 수 있어, 배포 빌드는 **
 
 회원가입·좋아요·댓글·DM·알림도 mock에서 동작합니다.
 
-### 설정
+### 설정 (중요)
 
-1. Repo → **Settings** → **Pages** → Source: **GitHub Actions**
-2. `main`에 push → `.github/workflows/deploy-pages.yml` 자동 배포
+1. Repo → **Settings** → **Pages**
+2. **Build and deployment** → Source: **Deploy from a branch**
+3. Branch: **`gh-pages`** / **`/ (root)`** → Save
+
+`main`에 push하면 Actions가 `npm run build` 후 **`gh-pages` 브랜치**에 배포합니다.  
+(예전처럼 `main` 루트 소스만 올리면 화면이 비어 있습니다.)
+
+접속 URL 예: `https://ashveil-dev.github.io/Instagram-Frontend/#/home`
 
 ### 로컬에서 Pages 미리보기
 
