@@ -1,23 +1,35 @@
-import NotificationSlide from "./slide/Notification/Notification";
-import SearchSlide from "./slide/Search/Search";
+import NotificationSlide from "@/containers/common/Menu/SlideMenu/Notification";
+import SearchSlide from "@/containers/common/Menu/SlideMenu/Search";
 
 interface ISlideMenu {
 	slide: string;
 }
 
+const SLIDE_PANEL_WIDTH = 397;
+const SIDEBAR_COLLAPSED_WIDTH = 72;
+
 function SlideMenu({ slide }: ISlideMenu) {
+	if (slide === "") {
+		return null;
+	}
+
 	return (
-		<div
+		<aside
 			className={
-				"absolute right-0 z-[1000] bg-[white] py-[8px] top-0 bottom-0 w-[397px] border-r-[#dbdbdb] shadow-[4px_0_24px_rgba(0,0,0,0.15)] rounded-tr-[16px] rounded-br-[16px] transition-transform origin-top-left " +
-				(slide !== ""
-					? "left-[72px] scale-x-100 delay-[400ms] duration-[150ms]"
-					: "scale-x-0 delay-0 duration-0")
+				"fixed top-0 bottom-0 z-[1000] flex flex-col bg-white " +
+				"border-r border-[#dbdbdb] shadow-[4px_0_24px_rgba(0,0,0,0.15)] " +
+				"rounded-tr-[16px] rounded-br-[16px]"
 			}
+			style={{
+				left: SIDEBAR_COLLAPSED_WIDTH,
+				width: SLIDE_PANEL_WIDTH,
+			}}
 		>
-			{slide === "notification" && <NotificationSlide />}
-			{slide === "search" && <SearchSlide />}
-		</div>
+			<div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden py-[8px]">
+				{slide === "notification" && <NotificationSlide />}
+				{slide === "search" && <SearchSlide />}
+			</div>
+		</aside>
 	);
 }
 

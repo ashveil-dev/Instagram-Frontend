@@ -8,6 +8,13 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+server/node_modules
+server/dist
+server/files/images/*
+!server/files/images/.gitkeep
+server/files/videos/*
+!server/files/videos/.gitkeep
+server/.env
 dist
 dist-ssr
 *.local

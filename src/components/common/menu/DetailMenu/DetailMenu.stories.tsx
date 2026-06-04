@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import DetailMenuComponent from "./DetailMenu";
 
-// More on how to set up stories at: http://storybook.js.org/docs/writing-stories#default-export
+const noop = () => {};
+
 const meta = {
 	title: "Example/DetailMenu",
 	component: DetailMenuComponent,
@@ -11,13 +12,21 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// More on writing stories with args: http://storybook.js.org/docs/writing-stories/args
 export const Default: Story = {
-	args: { show: true },
+	args: {
+		show: true,
+		onSettings: noop,
+		onActivity: noop,
+		onSaved: noop,
+		onTheme: noop,
+		onReport: noop,
+		onSwitchAccount: noop,
+		onLogout: noop,
+	},
 	render: function Render(args) {
 		return (
 			<div className="w-[500px] h-[500px]">
-				<DetailMenuComponent show={args.show} />
+				<DetailMenuComponent {...args} />
 			</div>
 		);
 	},

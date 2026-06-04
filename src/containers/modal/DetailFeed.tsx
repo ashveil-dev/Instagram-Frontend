@@ -1,9 +1,10 @@
 import { useCallback, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/utils/hooks/redux";
-import axiosInstance from "@/utils/axios/index";
 import DetailFeedComponent from "@/components/modal/detailFeed/DetailFeed";
 import { getFeedThunk } from "@/slices/feed/thunk";
 import { setFeedList } from "@/slices/feed/slice";
+import { likePostApi } from "@/slices/feed/api";
+import { createCommentApi, likeCommentApi } from "@/slices/comment/api";
 
 function DetailFeedContainer() {
 	const dispatch = useAppDispatch();
@@ -16,17 +17,9 @@ function DetailFeedContainer() {
 			if (feed === null || feed === undefined) return;
 
 			try {
-				await axiosInstance({
-					method: "post",
-					url: "/comment",
-					headers: {
-						Authorization:
-							"Bearer " + localStorage.getItem("accessToken"),
-					},
-					data: {
-						id: feed?.id,
-						body: comment,
-					},
+				await createCommentApi({
+					id: feed.id,
+					body: comment,
 				});
 				dispatch(
 					setFeedList({
@@ -36,7 +29,7 @@ function DetailFeedContainer() {
 					})
 				);
 				setComment("");
-				dispatch(getFeedThunk({ id: feed?.id }));
+				dispatch(getFeedThunk({ id: feed.id }));
 			} catch (e) {
 				alert("댓글 쓰기에 실패하였습니다.");
 				console.log(e);
@@ -66,17 +59,7 @@ function DetailFeedContainer() {
 		if (feed === undefined) return;
 
 		try {
-			await axiosInstance({
-				method: "get",
-				url: "/post/like",
-				headers: {
-					Authorization:
-						"Bearer " + localStorage.getItem("accessToken"),
-				},
-				params: {
-					id: feed?.id,
-				},
-			});
+			await likePostApi(feed.id);
 			dispatch(
 				setFeedList({
 					id: feed.id,
@@ -93,11 +76,25 @@ function DetailFeedContainer() {
 					value: !feed.pressLike,
 				})
 			);
-			dispatch(getFeedThunk({ id: feed?.id }));
+			dispatch(getFeedThunk({ id: feed.id }));
 		} catch (e) {
 			console.log(e);
 		}
 	}, [feed, dispatch]);
+
+	const commentLikeOnClick = useCallback(
+		async (commentId: string) => {
+			if (feed === undefined) return;
+
+			try {
+				await likeCommentApi(commentId);
+				dispatch(getFeedThunk({ id: feed.id }));
+			} catch (e) {
+				console.log(e);
+			}
+		},
+		[feed, dispatch]
+	);
 
 	if (feed === undefined) return null;
 	return (
@@ -108,6 +105,7 @@ function DetailFeedContainer() {
 			commentOnKeyDown={commentOnKeyDown}
 			commentOnChange={commentOnChange}
 			commentOnSubmit={commentOnSubmit}
+			commentLikeOnClick={commentLikeOnClick}
 		/>
 	);
 }

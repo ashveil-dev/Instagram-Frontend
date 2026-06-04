@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getFeedListThunk, uploadFeedThunk, getFeedThunk } from "./thunk";
+import {
+	getFeedListThunk,
+	getProfilePostsThunk,
+	uploadFeedThunk,
+	getFeedThunk,
+} from "./thunk";
 import { IFeedData } from "@/utils/types/feed";
 
 interface IInitialState {
@@ -20,6 +25,10 @@ const feedSlice = createSlice({
 	name: "view",
 	initialState,
 	reducers: {
+		resetFeedList: (state) => {
+			state.feedList = [];
+			state.error = undefined;
+		},
 		setFeedList: (state, { payload: { id, field, value } }) => {
 			state.feedList = state.feedList.map((feed) => {
 				if (feed.id === id)
@@ -59,6 +68,32 @@ const feedSlice = createSlice({
 				state.loading = false;
 				state.error = action.payload;
 			})
+			.addCase(getProfilePostsThunk.pending, (state) => {
+				state.loading = true;
+				state.error = undefined;
+			})
+			.addCase(getProfilePostsThunk.fulfilled, (state, action) => {
+				state.loading = false;
+				if (state.feedList.length === 0) {
+					state.feedList = action.payload.posts;
+				} else {
+					for (let i = 0; i < action.payload.posts.length; i++) {
+						if (
+							state.feedList[
+								state.feedList.length -
+									action.payload.posts.length +
+									i
+							]?.id !== action.payload.posts[i].id
+						) {
+							state.feedList.push(action.payload.posts[i]);
+						}
+					}
+				}
+			})
+			.addCase(getProfilePostsThunk.rejected, (state, action) => {
+				state.loading = false;
+				state.error = action.payload;
+			})
 			.addCase(uploadFeedThunk.pending, (state) => {
 				state.loading = true;
 				state.error = undefined;
@@ -84,5 +119,5 @@ const feedSlice = createSlice({
 			}),
 });
 
-export const { setFeedList } = feedSlice.actions;
+export const { setFeedList, resetFeedList } = feedSlice.actions;
 export default feedSlice.reducer;

@@ -16,6 +16,7 @@ import HeartFilledIcon from "@/assets/images/icons/heart_fill.svg";
 import MakeIcon from "@/assets/images/icons/make.svg";
 import ThreadIcon from "@/assets/images/icons/thread.svg";
 import MenuIcon from "@/assets/images/icons/menu.svg";
+import PersonIcon from "@/assets/images/icons/person.svg";
 
 interface IMainMenu {
 	extend: boolean;
@@ -34,7 +35,7 @@ function MainMenu({ extend, buttonOnClick, currentClickedButton }: IMainMenu) {
 			}
 		>
 			<div className="mb-[19px] pt-[25px] pb-[16px] px-[12px] h-[73px]">
-				<a href="/">
+				<a href="/home">
 					{extend ? (
 						<img src={LogoImage} />
 					) : (
@@ -108,8 +109,8 @@ function MainMenu({ extend, buttonOnClick, currentClickedButton }: IMainMenu) {
 				/>
 				<MenuButton
 					index="profile"
-					icon={HomeIcon}
-					iconOnClicked={HomeIcon}
+					icon={PersonIcon}
+					iconOnClicked={PersonIcon}
 					label="프로필"
 					currentIndexInButtonClicked={currentClickedButton}
 					showLabel={extend}

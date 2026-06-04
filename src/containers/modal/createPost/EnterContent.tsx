@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import EnterContentComponent from "@/components/modal/createPost/EnterContent";
-import getPreviewFromFile from "@/utils/hooks/getPreviewFromFile";
+import getMediaPreviewFromFile, {
+	type MediaPreview,
+} from "@/utils/hooks/getMediaPreviewFromFile";
 
 interface IEnterContentContainer {
 	imageFileList: FileList | undefined;
@@ -13,19 +15,55 @@ function EnterContentContainer({
 	content,
 	setContent,
 }: IEnterContentContainer) {
-	const [images, setImages] = useState<string[]>([]);
+	const [media, setMedia] = useState<MediaPreview[]>([]);
+	const revokeUrlsRef = useRef<string[]>([]);
 
 	useEffect(() => {
-		const arr: string[] = [];
+		revokeUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+		revokeUrlsRef.current = [];
 
-		if (imageFileList !== undefined) {
-			for (const imageFile of imageFileList) {
-				getPreviewFromFile(imageFile)?.then((result: string) => {
-					arr.push(result);
-					setImages(arr);
-				});
-			}
+		if (imageFileList === undefined) {
+			setMedia([]);
+			return;
 		}
+
+		let cancelled = false;
+
+		const loadPreviews = async () => {
+			const previews = await Promise.all(
+				Array.from(imageFileList).map(async (file) => {
+					const preview = getMediaPreviewFromFile(file);
+					if (preview === null) {
+						throw new Error(`Unsupported file: ${file.name}`);
+					}
+					return preview;
+				})
+			);
+
+			if (cancelled) {
+				previews
+					.filter((item) => item.type === "video")
+					.forEach((item) => URL.revokeObjectURL(item.url));
+				return;
+			}
+
+			revokeUrlsRef.current = previews
+				.filter((item) => item.type === "video")
+				.map((item) => item.url);
+			setMedia(previews);
+		};
+
+		loadPreviews().catch(() => {
+			if (!cancelled) {
+				setMedia([]);
+			}
+		});
+
+		return () => {
+			cancelled = true;
+			revokeUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+			revokeUrlsRef.current = [];
+		};
 	}, [imageFileList]);
 
 	const contentOnChange = useCallback(
@@ -37,7 +75,7 @@ function EnterContentContainer({
 
 	return (
 		<EnterContentComponent
-			images={images}
+			media={media}
 			content={content}
 			contentOnChange={contentOnChange}
 		/>

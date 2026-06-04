@@ -1,0 +1,28 @@
+services:
+  backend:
+    image: bluebird999280/backend:latest
+    container_name: instagram_backend
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: "4000"
+      NODE_ENV: production
+      PUBLIC_DIR: /app/public
+      # Atlas (비밀번호는 .env 또는 서버 시크릿에 설정)
+      MONGO_USER: ashveil
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_CLUSTER_HOST: cluster0.fira4pz.mongodb.net
+      MONGO_DB_NAME: instagram
+      # 또는 한 줄로:
+      # MONGO_URI: mongodb+srv://ashveil:${MONGO_PASSWORD}@cluster0.fira4pz.mongodb.net/instagram?retryWrites=true&w=majority&appName=Cluster0
+      SERVER_ADDRESS: ${SERVER_ADDRESS:-localhost}
+      PUBLIC_SERVER_URL: ${PUBLIC_SERVER_URL:-http://localhost:4000}
+      PASS_PHRASE: ${PASS_PHRASE}
+      PIXABAY_API_KEY: ${PIXABAY_API_KEY:-}
+      RUN_DEPLOY_SEED: "true"
+    volumes:
+      - instagram_uploads:/app/server/files
+
+volumes:
+  instagram_uploads:

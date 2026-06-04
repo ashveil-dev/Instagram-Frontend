@@ -25,6 +25,8 @@
       "@/assets/*" : ["assets/*"],
       "@/atoms/*" : ["atoms/*"],
       "@/components/*" : ["components/*"],
+      "@/constants/*" : ["constants/*"],
+      "@/mock/*" : ["mock/*"],
       "@/containers/*" : ["containers/*"],
       "@/pages/*" : ["pages/*"],
       "@/slices/*" : ["slices/*"],

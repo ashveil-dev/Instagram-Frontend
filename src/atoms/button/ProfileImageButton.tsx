@@ -5,7 +5,7 @@ interface IProfileImageButton {
 function ProfileImageButton({ image }: IProfileImageButton) {
 	return (
 		<div className="rounded-[50%] w-full h-full overflow-hidden">
-			<img src={image} object-fit="cover" />
+			<img src={image} alt="" className="w-full h-full object-cover" />
 		</div>
 	);
 }

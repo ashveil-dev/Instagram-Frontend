@@ -1,0 +1,34 @@
+name: CI/CD
+on: [push]
+jobs : 
+  backend-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name : Checkout-source code
+        uses : actions/checkout@v4
+      - name : install package
+        run : npm install
+      - name : build project
+        run : npm run build
+      - name : build docker image
+        run : docker build -t bluebird999280/backend .
+      - name : Login docker hub
+        uses : docker/login-action@v2
+        with :
+          username : ${{ secrets.DOCKERHUB_USERNAME }} 
+          password : ${{ secrets.DOCKERHUB_TOKEN  }} 
+      - name : Publish to docker hub
+        run : docker push bluebird999280/backend
+      - name : Connect to EC2 and upload docker image
+        uses : appleboy/ssh-action@v0.1.6
+        with :
+          host : ${{ secrets.SERVER_ADDRESS }}
+          username : ubuntu
+          key : ${{ secrets.SERVER_TOKEN }}
+          port : 22
+          script : |
+            docker stop instagram_backend
+            docker rm instagram_backend
+            docker image prune -a
+            docker pull bluebird999280/backend
+            docker compose up -d

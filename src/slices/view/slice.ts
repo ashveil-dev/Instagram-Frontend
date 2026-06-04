@@ -29,9 +29,13 @@ const viewSlice = createSlice({
 		toggleDetailMenu: (state) => {
 			state.detailMenu = !state.detailMenu;
 		},
+		setDetailMenu: (state, action: PayloadAction<boolean>) => {
+			state.detailMenu = action.payload;
+		},
 	},
 });
 
-export const { setModal, setSlideMenu, toggleDetailMenu } = viewSlice.actions;
+export const { setModal, setSlideMenu, toggleDetailMenu, setDetailMenu } =
+	viewSlice.actions;
 
 export default viewSlice.reducer;

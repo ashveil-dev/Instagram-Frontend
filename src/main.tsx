@@ -7,10 +7,22 @@ import Modal from "@/containers/modal/Modal";
 import App from "./App.tsx";
 import "./index.css";
 
+const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, "") || "/";
+
+const ghPagesRedirect = sessionStorage.getItem("ghPagesRedirect");
+if (ghPagesRedirect) {
+	sessionStorage.removeItem("ghPagesRedirect");
+	const target = `${routerBasename}${ghPagesRedirect}`.replace(
+		/\/+/g,
+		"/"
+	);
+	window.history.replaceState(null, "", target);
+}
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<Provider store={store}>
 		<PersistGate loading={null} persistor={persistor}>
-			<BrowserRouter>
+			<BrowserRouter basename={routerBasename}>
 				<Modal />
 				<App />
 			</BrowserRouter>

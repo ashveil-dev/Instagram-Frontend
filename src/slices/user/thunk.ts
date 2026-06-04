@@ -11,6 +11,11 @@ export const loginThunk = TypedCreateAsyncThunk(
 			return result;
 		} catch (e: unknown) {
 			if (e instanceof AxiosError) {
+				if (!e.response) {
+					return thunkAPI.rejectWithValue(
+						"Unable to communicate with the server"
+					);
+				}
 				return thunkAPI.rejectWithValue(
 					e.response?.data.message ?? "unknown error"
 				);
@@ -28,6 +33,11 @@ export const registerThunk = TypedCreateAsyncThunk(
 			return result;
 		} catch (e: unknown) {
 			if (e instanceof AxiosError) {
+				if (!e.response) {
+					return thunkAPI.rejectWithValue(
+						"Unable to communicate with the server"
+					);
+				}
 				return thunkAPI.rejectWithValue(
 					e.response?.data.message ?? "unknown error"
 				);

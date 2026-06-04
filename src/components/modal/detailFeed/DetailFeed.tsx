@@ -3,7 +3,8 @@ import type { IFeedData } from "@/utils/types/feed";
 import CommentComponent from "./Comment";
 import MediaSlide from "@/components/home/Feed/MediaSlide";
 import ProfileImageButton from "@/atoms/button/ProfileImageButton";
-import ProfileImage from "@/assets/images/test/profile.jpg";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants/profileImages";
+import { resolveMediaUrl } from "@/utils/mediaUrl";
 import MoreIcon from "@/assets/images/icons/more.svg";
 import HeartIcon from "@/assets/images/icons/heart.svg";
 import HeartFilledIcon from "@/assets/images/icons/heart_fill.svg?react";
@@ -18,6 +19,7 @@ interface IDetailFeedComponent {
 	commentOnChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 	commentOnSubmit: (e: React.FormEvent) => void;
 	commentOnKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+	commentLikeOnClick: (commentId: string) => void;
 }
 
 function DetailFeedComponent({
@@ -27,8 +29,12 @@ function DetailFeedComponent({
 	commentOnChange,
 	commentOnSubmit,
 	commentOnKeyDown,
+	commentLikeOnClick,
 }: IDetailFeedComponent) {
 	const [more, setMore] = useState(false);
+	const authorPhotoSrc = feed.authorPhoto
+		? resolveMediaUrl(feed.authorPhoto)
+		: DEFAULT_PROFILE_IMAGE;
 
 	return (
 		<div className="flex items-center justify-center">
@@ -44,7 +50,7 @@ function DetailFeedComponent({
 					<div className="p-[14px_16px] flex items-center border-b border-b-[rgb(239,239,239)]">
 						<div className="mr-[12px]">
 							<div className="w-[32px] h-[32px]">
-								<ProfileImageButton image={ProfileImage} />
+								<ProfileImageButton image={authorPhotoSrc} />
 							</div>
 						</div>
 						<div className="flex-grow">
@@ -60,7 +66,7 @@ function DetailFeedComponent({
 						<div className="flex  mt-[8px] leading-[14px] text-[14px] mb-[15px]">
 							<div className="mr-[12px]">
 								<div className="w-[32px] h-[32px]">
-									<ProfileImageButton image={ProfileImage} />
+									<ProfileImageButton image={authorPhotoSrc} />
 								</div>
 							</div>
 							<div className="border-b border-b-gray-200 ">
@@ -106,9 +112,14 @@ function DetailFeedComponent({
 						{feed.comments?.map((comment) => (
 							<CommentComponent
 								key={comment.id}
+								id={comment.id}
 								author={comment.author}
+								authorPhoto={comment.authorPhoto}
 								body={comment.body}
 								date={comment.modificationDate}
+								likeCount={comment.likeCount}
+								pressLike={comment.pressLike}
+								onLikeClick={commentLikeOnClick}
 							/>
 						))}
 					</div>

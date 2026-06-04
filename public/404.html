@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<title>Instagram</title>
+		<script>
+			// GitHub Pages SPA: /Instagram-Frontend/home → index.html + 경로 복원
+			(function () {
+				var repoSegment = "/Instagram-Frontend";
+				var path = location.pathname;
+				var base = path.startsWith(repoSegment)
+					? repoSegment
+					: path.split("/").slice(0, 2).join("/");
+				var rest = path.replace(base, "") || "/";
+				var search = location.search || "";
+				var hash = location.hash || "";
+				sessionStorage.setItem(
+					"ghPagesRedirect",
+					rest + search + hash
+				);
+				location.replace(
+					location.origin + base + "/" + search + hash
+				);
+			})();
+		</script>
+	</head>
+	<body></body>
+</html>

@@ -1,15 +1,16 @@
 import MainMenu from "@/containers/common/Menu/MainMenu";
 import SlideMenu from "@/containers/common/Menu/SlideMenu";
-import DetailMenu from "@/containers/common/Menu/DetailMenu";
+import DetailMenuContainer from "@/containers/common/Menu/DetailMenu";
+import { useAppSelector } from "@/utils/hooks/redux";
 
 function Menu() {
+	const showDetailMenu = useAppSelector((state) => state.view.detailMenu);
+
 	return (
-		<div className="relative flex h-dvh">
-			<div className="flex flex-row h-full">
-				<MainMenu />
-				<SlideMenu />
-				<DetailMenu />
-			</div>
+		<div className="relative z-[1] flex-shrink-0 h-dvh">
+			<MainMenu />
+			<SlideMenu />
+			<DetailMenuContainer show={showDetailMenu} />
 		</div>
 	);
 }

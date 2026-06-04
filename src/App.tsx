@@ -1,10 +1,17 @@
 import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "@/utils/hooks/redux";
 import { checkThunk } from "@/slices/user/thunk";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Routes, Route } from "react-router-dom";
+import { useNavigate, useLocation, Routes, Route, Navigate } from "react-router-dom";
 import AuthPage from "./pages/Auth";
+import AppLayout from "./pages/AppLayout";
 import HomePage from "./pages/Home";
+import ExplorePage from "./pages/Explore";
+import ReelsPage from "./pages/Reels";
+import DirectPage from "./pages/Direct";
+import ProfilePage from "./pages/Profile";
+import SavedPage from "./pages/Saved";
+import ActivityPage from "./pages/Activity";
+import SettingsPage from "./pages/Settings";
 import LoadingComponent from "@/components/auth/Loading";
 
 function App() {
@@ -14,7 +21,6 @@ function App() {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	// accessToken과 RefreshToken이 유효한 지 확인하는 루틴
 	useEffect(() => {
 		const accessToken = localStorage.getItem("accessToken");
 		const refreshToken = localStorage.getItem("refreshToken");
@@ -22,14 +28,11 @@ function App() {
 		dispatch(checkThunk({ accessToken, refreshToken }));
 	}, [location.pathname, dispatch]);
 
-	// isLogin을 통한 페이지 접근 권한 설정
 	useEffect(() => {
-		// 로그인 o, 인증페이지일 경우
 		if (isLogin && location.pathname === "/") {
 			return navigate("/home");
 		}
 
-		// 로그인 x, 인증페이지가 아닐 경우
 		if (!isLogin && location.pathname !== "/") {
 			return navigate("/");
 		}
@@ -40,7 +43,23 @@ function App() {
 			{loading && <LoadingComponent />}
 			<Routes>
 				<Route path="/" element={<AuthPage />} />
-				<Route path="/home" element={<HomePage />} />
+				<Route element={<AppLayout />}>
+					<Route path="/home" element={<HomePage />} />
+					<Route path="/explore" element={<ExplorePage />} />
+					<Route path="/reels" element={<ReelsPage />} />
+					<Route path="/direct" element={<DirectPage />} />
+					<Route path="/profile" element={<ProfilePage />} />
+					<Route path="/profile/:nickName" element={<ProfilePage />} />
+					<Route path="/saved" element={<SavedPage />} />
+					<Route path="/activity" element={<ActivityPage />} />
+					<Route path="/settings" element={<SettingsPage />} />
+				</Route>
+				<Route
+					path="*"
+					element={
+						<Navigate to={isLogin ? "/home" : "/"} replace />
+					}
+				/>
 			</Routes>
 		</>
 	);

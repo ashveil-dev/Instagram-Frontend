@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { IFeedData } from "@/utils/types/feed";
 import ProfileImageButton from "@/atoms/button/ProfileImageButton";
-import ProfileImage from "@/assets/images/test/profile.jpg";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants/profileImages";
+import { resolveMediaUrl } from "@/utils/mediaUrl";
 import MoreIcon from "@/assets/images/icons/more.svg";
 import HeartIcon from "@/assets/images/icons/heart.svg";
 import HeartFilledIcon from "@/assets/images/icons/heart_fill.svg?react";
@@ -30,13 +31,16 @@ function Feed({
 	commentOnKeyDown,
 }: IFeedComponent) {
 	const [more, setMore] = useState(false);
+	const authorPhotoSrc = feed.authorPhoto
+		? resolveMediaUrl(feed.authorPhoto)
+		: DEFAULT_PROFILE_IMAGE;
 
 	return (
 		<div className="w-[min(100vw, 470px)] mb-[20px]">
 			<div className="pb-[12px] flex items-center">
 				<div className="mr-[12px]">
 					<div className="w-[32px] h-[32px]">
-						<ProfileImageButton image={ProfileImage} />
+						<ProfileImageButton image={authorPhotoSrc} />
 					</div>
 				</div>
 				<div className="flex-grow">

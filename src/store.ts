@@ -4,17 +4,19 @@ import storage from "redux-persist/lib/storage";
 import user from "@/slices/user/slice";
 import view from "@/slices/view/slice";
 import feed from "@/slices/feed/slice";
+import profile from "@/slices/profile/slice";
 
 const rootReducer = combineReducers({
 	user: user,
 	view: view,
 	feed: feed,
+	profile: profile,
 });
 
 const persistConfig = {
 	key: "root",
 	storage,
-	blacklist: ["view", "feed"],
+	blacklist: ["view", "feed", "profile"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -6,6 +6,8 @@ export interface IGetFeedListParams {
 export interface IFeedData {
 	id: string;
 	author: string;
+	authorId?: string;
+	authorPhoto?: string;
 	caption: string;
 	contents: string[];
 	pressLike: boolean;
@@ -14,6 +16,7 @@ export interface IFeedData {
 	comments?: {
 		id: string;
 		author: string;
+		authorPhoto?: string;
 		body: string;
 		likeCount: number;
 		pressLike: boolean;

@@ -1,5 +1,11 @@
 import TypedCreateAsyncThunk from "@/utils/hooks/TypedCreateAsyncThunk";
-import { getFeedApi, getFeedListApi, uploadFeedApi } from "./api";
+import {
+	getFeedApi,
+	getFeedListApi,
+	getProfilePostsApi,
+	uploadFeedApi,
+	type FeedListEndpoint,
+} from "./api";
 import {
 	IGetFeedListParams,
 	IUploadFeedBody,
@@ -9,10 +15,14 @@ import { AxiosError } from "axios";
 
 export const getFeedListThunk = TypedCreateAsyncThunk(
 	"feed/getFeedListThunk",
-	async (params: IGetFeedListParams, thunkAPI) => {
+	async (
+		params: IGetFeedListParams & { endpoint?: FeedListEndpoint },
+		thunkAPI
+	) => {
 		try {
-			const result = await getFeedListApi(params);
-			return result;
+			const { endpoint = "home", ...query } = params;
+			const result = await getFeedListApi(query, endpoint);
+			return { ...result, endpoint };
 		} catch (e: unknown) {
 			if (e instanceof AxiosError) {
 				return thunkAPI.rejectWithValue(e.response?.data.message);
@@ -36,6 +46,25 @@ export const uploadFeedThunk = TypedCreateAsyncThunk(
 			}
 
 			const result = await uploadFeedApi(sendData);
+			return result;
+		} catch (e: unknown) {
+			if (e instanceof AxiosError) {
+				return thunkAPI.rejectWithValue(e.response?.data.message);
+			}
+			return thunkAPI.rejectWithValue("Unknown Error");
+		}
+	}
+);
+
+export const getProfilePostsThunk = TypedCreateAsyncThunk(
+	"feed/getProfilePostsThunk",
+	async (
+		params: IGetFeedListParams & { nickName: string },
+		thunkAPI
+	) => {
+		try {
+			const { nickName, ...query } = params;
+			const result = await getProfilePostsApi(nickName, query);
 			return result;
 		} catch (e: unknown) {
 			if (e instanceof AxiosError) {

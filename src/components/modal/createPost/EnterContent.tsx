@@ -1,16 +1,17 @@
 import { useState, useCallback } from "react";
-import ImageSlide from "@/components/common/ImageSlide/imageSlide2";
-import ProfileImage from "@/assets/images/test/profile.jpg";
+import MediaSlide from "@/components/common/MediaSlide/MediaSlide";
+import type { MediaPreview } from "@/utils/hooks/getMediaPreviewFromFile";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants/profileImages";
 import IconIcon from "@/assets/images/icons/icon.svg?react";
 
 interface IEnterContentComponent {
-	images: string[];
+	media: MediaPreview[];
 	content: string;
 	contentOnChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 function EnterContentComponent({
-	images,
+	media,
 	content,
 	contentOnChange,
 }: IEnterContentComponent) {
@@ -23,7 +24,7 @@ function EnterContentComponent({
 	return (
 		<div className="flex w-full h-full ">
 			<div className="basis-[66.6666%] overflow-hidden">
-				<ImageSlide width="100%" height="100%" images={images} />
+				<MediaSlide width="100%" height="100%" media={media} />
 			</div>
 			<form className="basis-[33.3333%] overflow-y-hidden flex items-stretch">
 				<div className="relative flex flex-col w-full overflow-y-hidden">
@@ -31,8 +32,9 @@ function EnterContentComponent({
 						<div className="flex items-center ">
 							<div className="w-[28px] h-[28px] mr-[12px] overflow-x-hidden overflow-y-hidden rounded-[50%]">
 								<img
-									src={ProfileImage}
+									src={DEFAULT_PROFILE_IMAGE}
 									className="w-full h-full"
+									alt=""
 								/>
 							</div>
 							<div className="leading-[18px] text-[14px] font-semibold break-words">

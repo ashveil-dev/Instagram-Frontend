@@ -4,12 +4,17 @@ type errorsType = {
 
 const errors: errorsType = {
 	"Input are invalid": "입력값이 존재하지 않거나 유효하지 않습니다.",
+	"Inputs are invalid": "입력값이 존재하지 않거나 유효하지 않습니다.",
 	"Phone already exists": "휴대폰이 이미 존재합니다.",
 	"Email already exists": "이메일이 이미 존재합니다.",
 	"Nickname already exists": "닉네임이 이미 존재합니다.",
 	"User does not exist" : "해당 아이디가 존재하지 않습니다.",
 	"Password is not correct": "비밀번호가 틀렸습니다.",
 	"Unable to communicate with the server": "서버에 접속할 수 없습니다.",
+	"There are no files": "이미지를 선택해 주세요.",
+	"Only image files are allowed": "이미지 파일만 업로드할 수 있습니다.",
+	"Image file is too large": "이미지 크기는 5MB 이하여야 합니다.",
+	"Invalid image upload": "이미지 업로드에 실패했습니다.",
 	"Database unknown error": "서버에 장애가 발생했습니다.",
 };
 

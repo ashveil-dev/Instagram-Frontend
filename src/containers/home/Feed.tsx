@@ -1,11 +1,12 @@
 import { useState, useCallback } from "react";
 import { useAppDispatch } from "@/utils/hooks/redux";
 import { setModal } from "@/slices/view/slice";
-import axiosInstance from "@/utils/axios/index";
 import type { IFeedData } from "@/utils/types/feed";
 import FeedComponent from "@/components/home/Feed/Feed";
 import { getFeedThunk } from "@/slices/feed/thunk";
 import { setFeedList } from "@/slices/feed/slice";
+import { likePostApi } from "@/slices/feed/api";
+import { createCommentApi } from "@/slices/comment/api";
 
 interface IFeedContainer {
 	feed: IFeedData;
@@ -17,17 +18,7 @@ function FeedContainer({ feed }: IFeedContainer) {
 
 	const likeOnClick = useCallback(async () => {
 		try {
-			await axiosInstance({
-				method: "get",
-				url: "/post/like",
-				headers: {
-					Authorization:
-						"Bearer " + localStorage.getItem("accessToken"),
-				},
-				params: {
-					id: feed.id,
-				},
-			});
+			await likePostApi(feed.id);
 			dispatch(
 				setFeedList({
 					id: feed.id,
@@ -66,17 +57,9 @@ function FeedContainer({ feed }: IFeedContainer) {
 			e?.preventDefault();
 
 			try {
-				await axiosInstance({
-					method: "post",
-					url: "/comment",
-					headers: {
-						Authorization:
-							"Bearer " + localStorage.getItem("accessToken"),
-					},
-					data: {
-						id: feed.id,
-						body: comment,
-					},
+				await createCommentApi({
+					id: feed.id,
+					body: comment,
 				});
 				dispatch(
 					setFeedList({

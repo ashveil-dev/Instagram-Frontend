@@ -1,0 +1,44 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "server/**"
+      - "public/**"
+      - "docker-compose.yml"
+      - ".github/workflows/deploy-backend.yml"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -f server/Dockerfile -t bluebird999280/backend:latest .
+
+      - name: Login Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push image
+        run: docker push bluebird999280/backend:latest
+
+      - name: Deploy on EC2
+        if: ${{ secrets.SERVER_ADDRESS != '' }}
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_ADDRESS }}
+          username: ubuntu
+          key: ${{ secrets.SERVER_TOKEN }}
+          port: 22
+          script: |
+            cd ~/Instagram-Frontend || cd ~/instagram-frontend || exit 0
+            export MONGO_PASSWORD="${{ secrets.MONGO_PASSWORD }}"
+            export PASS_PHRASE="${{ secrets.PASS_PHRASE }}"
+            export PUBLIC_SERVER_URL="${{ secrets.PUBLIC_SERVER_URL }}"
+            docker pull bluebird999280/backend:latest
+            docker compose up -d --force-recreate backend
