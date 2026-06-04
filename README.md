@@ -102,6 +102,16 @@ npm run build:pages
 npm run preview:pages
 ```
 
+### 로컬에서 GitHub Pages 배포
+
+```bash
+npm install
+npm run deploy
+```
+
+`predeploy` → 빌드 + `404.html` 생성 후 `gh-pages` 브랜치에 push합니다.  
+(Pages 설정: branch **`gh-pages`** / **`/ (root)`**)
+
 ### 로컬 개발 (Express + MongoDB)
 
 별도 백엔드가 필요하면 `server/`를 사용합니다 (`VITE_USE_MOCK_API` 없이):

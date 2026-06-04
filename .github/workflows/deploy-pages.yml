@@ -23,14 +23,7 @@ jobs:
         run: npm ci
 
       - name: Build for GitHub Pages
-        env:
-          VITE_BASE_PATH: /Instagram-Frontend/
-          VITE_USE_MOCK_API: "true"
-          VITE_USE_HASH_ROUTER: "true"
-        run: npm run build
-
-      - name: SPA fallback (deep links)
-        run: cp dist/index.html dist/404.html
+        run: npm run deploy:ci
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
